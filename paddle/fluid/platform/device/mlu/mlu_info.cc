@@ -263,6 +263,37 @@ void MLUStreamSync(mluStream stream) {
   PADDLE_ENFORCE_MLU_SUCCESS(cnrtQueueSync(stream));
 }
 
+void MLUDeviceSync() { PADDLE_ENFORCE_MLU_SUCCESS(cnrtSyncDevice()); }
+
+void MLUEventCreate(mluEventHandle *event) {
+  PADDLE_ENFORCE_MLU_SUCCESS(cnrtNotifierCreate(event));
+}
+
+void MLUEventCreateWithFlag(mluEventHandle *event, unsigned int flags) {
+  PADDLE_ENFORCE_MLU_SUCCESS(cnrtNotifierCreateWithFlags(event, flags));
+}
+
+void MLUEventDestroy(mluEventHandle event) {
+  PADDLE_ENFORCE_MLU_SUCCESS(cnrtNotifierDestroy(event));
+}
+
+cnrtStatus MLUEventQuery(mluEventHandle event) {
+  return cnrtQueryNotifier(event);
+}
+
+void MLUStreamWaitEvent(mluEventHandle event, mluStream stream,
+                        unsigned int flag) {
+  PADDLE_ENFORCE_MLU_SUCCESS(cnrtQueueWaitNotifier(event, stream, flag));
+}
+
+void MLUWaitEvent(mluEventHandle event) {
+  PADDLE_ENFORCE_MLU_SUCCESS(cnrtWaitNotifier(event));
+}
+
+void MLUEventRecord(mluEventHandle event, mluStream stream) {
+  PADDLE_ENFORCE_MLU_SUCCESS(cnrtPlaceNotifier(event, stream));
+}
+
 static void RaiseNonOutOfMemoryError(cnrtStatus *status) {
   if (*status == cnrtErrorNoMem) {
     *status = cnrtSuccess;

@@ -121,6 +121,31 @@ void MLUMemsetAsync(void* dst, int value, size_t count, mluStream stream);
 //! Blocks until stream has completed all operations.
 void MLUStreamSync(mluStream stream);
 
+//! Blocks until current device has completed all tasks.
+void MLUDeviceSync();
+
+//! Creat MLU event for the current Device
+void MLUEventCreate(mluEventHandle* event);
+
+//! Creat MLU event with flag for the current Device
+void MLUEventCreateWithFlag(mluEventHandle* event, unsigned int flags);
+
+//! Destroy MLU event that was created by the MLUEventCreate
+void MLUEventDestroy(mluEventHandle event);
+
+//! Query the status of all the preceding tasks before the MLU event
+cnrtStatus MLUEventQuery(mluEventHandle event);
+
+//! Wait MLU event which stream is be specified
+void MLUStreamWaitEvent(mluEventHandle event, mluStream stream,
+                        unsigned int flag);
+
+//! Wait MLU event in this stream
+void MLUWaitEvent(mluEventHandle event);
+
+//! Place MLU event into a specified stream
+void MLUEventRecord(mluEventHandle event, mluStream stream);
+
 //! MLUMalloc with recorded info
 cnrtStatus RecordedMLUMalloc(void** ptr, size_t size, int dev_id);
 

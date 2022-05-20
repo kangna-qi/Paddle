@@ -826,6 +826,18 @@ PADDLE_DEFINE_EXPORTED_bool(nccl_blocking_wait, false, "nccl blocking wait");
 #endif
 
 /**
+ * ProcessGroupCNCL related FLAG
+ * Name: cncl_blocking_wait
+ * Since Version:
+ * Value Range: bool, default=false
+ * Example:
+ * Note: cncl blocking wait.
+ */
+#if defined(PADDLE_WITH_MLU)
+PADDLE_DEFINE_EXPORTED_bool(cncl_blocking_wait, false, "cncl blocking wait");
+#endif
+
+/**
  * Autotune related FLAG
  * Name: FLAGS_use_autotune
  * Since Version: 2.3.0

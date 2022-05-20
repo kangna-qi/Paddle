@@ -52,6 +52,25 @@ inline cnclDataType_t ToCNCLDataType(framework::proto::VarType::Type type) {
   }
 }
 
+inline cnclDataType_t ToCNCLDataType(experimental::DataType type) {
+  if (type == experimental::DataType::FLOAT32) {
+    return cnclFloat32;
+  } else if (type == experimental::DataType::FLOAT16) {
+    return cnclFloat16;
+  } else if (type == experimental::DataType::INT32) {
+    return cnclInt32;
+  } else if (type == experimental::DataType::INT16) {
+    return cnclInt16;
+  } else if (type == experimental::DataType::INT8) {
+    return cnclInt8;
+  } else if (type == experimental::DataType::UINT8) {
+    return cnclUint8;
+  } else {
+    PADDLE_THROW(platform::errors::Unimplemented(
+        "This datatype in cncl is not supported."));
+  }
+}
+
 }  // namespace platform
 }  // namespace paddle
 #endif

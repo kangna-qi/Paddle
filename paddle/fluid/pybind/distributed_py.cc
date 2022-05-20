@@ -39,6 +39,10 @@ limitations under the License. */
 #include "paddle/fluid/distributed/collective/ProcessGroupHCCL.h"
 #endif
 
+#if defined(PADDLE_WITH_CNCL)
+#include "paddle/fluid/distributed/collective/ProcessGroupCNCL.h"
+#endif
+
 #if defined(PADDLE_WITH_GLOO) && defined(PADDLE_WITH_PSCORE) && \
     (defined(PADDLE_WITH_NCCL) || defined(PADDLE_WITH_ASCEND_CL))
 #include "paddle/fluid/distributed/collective/ProcessGroupHeter.h"
@@ -242,6 +246,17 @@ void BindDistributed(py::module *m) {
       *m, "ProcessGroupNCCL", ProcessGroup)
       .def(py::init<const std::shared_ptr<distributed::Store> &, int, int,
                     const platform::CUDAPlace &, int>(),
+           py::arg("store"), py::arg("rank"), py::arg("world_size"),
+           py::arg("place"), py::arg("group_id") = 0,
+           py::call_guard<py::gil_scoped_release>());
+#endif
+
+#if defined(PADDLE_WITH_CNCL)
+  py::class_<distributed::ProcessGroupCNCL,
+             std::shared_ptr<distributed::ProcessGroupCNCL>>(
+      *m, "ProcessGroupCNCL", ProcessGroup)
+      .def(py::init<const std::shared_ptr<distributed::Store> &, int, int,
+                    const platform::MLUPlace &, int>(),
            py::arg("store"), py::arg("rank"), py::arg("world_size"),
            py::arg("place"), py::arg("group_id") = 0,
            py::call_guard<py::gil_scoped_release>());
